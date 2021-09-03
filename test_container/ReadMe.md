@@ -1,3 +1,9 @@
+# Disclaimer :
+The original repo is here: https://github.com/aws-samples/amazon-sagemaker-immersion-day
+I modified and appropriate it for my own purpose !
+
+You're good to go ! **ENJOY**
+
 # Bring-your-own Algorithm Sample
 
 This example shows how to package an algorithm for use with SageMaker. We have chosen a simple [scikit-learn][skl] implementation of decision trees to illustrate the procedure.
