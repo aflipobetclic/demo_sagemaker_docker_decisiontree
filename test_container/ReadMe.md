@@ -1,5 +1,6 @@
 # Disclaimer :
 The original repo is here: https://github.com/aws-samples/amazon-sagemaker-immersion-day
+
 I modified and appropriate it for my own purpose !
 
 You're good to go ! **ENJOY**
