@@ -3,6 +3,8 @@ The original repo is here: https://github.com/aws-samples/amazon-sagemaker-immer
 
 I modified and appropriate it for my own purpose !
 
+I added more recent libraries and change a few files to make it work with new changes
+
 You're good to go ! **ENJOY**
 
 # Bring-your-own Algorithm Sample
