@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "casino-perso"
+version = "0.1.0"
+description = ""
+authors = ["sarah"]
+
+[tool.poetry.dependencies]
+python = "3.7.12"
+pandas = "^1.2.5"
+implicit = "^0.4.4"
+sklearn = "^0.0"
+tensorflow = "2.5.0"
+fsspec = "^2021.8.1"
+s3fs = "^2021.8.1"
+
+[tool.poetry.dev-dependencies]
+plotly = "^5.0.0"
+ipykernel = "^5.5.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

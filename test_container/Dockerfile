@@ -2,41 +2,29 @@
 # This is a Python 2 image that uses the nginx, gunicorn, flask stack
 # for serving inferences in a stable way.
 
-FROM public.ecr.aws/lts/ubuntu:18.04
+FROM python:3.7
 
-MAINTAINER Amazon AI <sage-learner@amazon.com>
-
-
-RUN apt-get -y update && apt-get install -y --no-install-recommends \
-         wget \
-         python3.7 \
-         python3-pip\
-         nginx \
-         ca-certificates \
-         build-essential \
-         file \
-         python3-dev \
-         python3.7-dev \
-         python3-setuptools \
-         gcc \
-    && rm -rf /var/lib/apt/lists/*
-
-# Here we get all python packages.
-# There's substantial overlap between scipy and numpy that we eliminate by
-# linking them together. Likewise, pip leaves the install caches populated which uses
-# a significant amount of space. These optimizations save a fair amount of space in the
-# image, which reduces start up time.
-COPY requirements.txt /requirements.txt
-
-RUN pip3 install --upgrade wheel && \
-    pip3 install --upgrade setuptools && \
-    pip3 install -r requirements.txt && \
-    (cd /usr/local/lib/python3.6/dist-packages/scipy/.libs; rm *; ln ../../numpy/.libs/* .) && \
-    rm -rf /root/.cache
+RUN apt-get update 
+RUN apt-get install -y git
+RUN pip install --upgrade pip
+RUN pip install ipykernel && \
+    python -m ipykernel install --user --name=casino-perso && \
+    pip install --quiet --no-cache-dir \
+    'boto3>1.0<2.0' \
+    'sagemaker>2.0<3.0'
+    
+# Install Poetry
+RUN pip install poetry
+# Disable virtual environments (see notes in README.md)
+RUN poetry config virtualenvs.create false --local
+# Copy the environment definition file and install the environment
 # Set some environment variables. PYTHONUNBUFFERED keeps Python from buffering our standard
 # output stream, which means that logs can be delivered to the user quickly. PYTHONDONTWRITEBYTECODE
 # keeps Python from writing the .pyc files which are unnecessary in this case. We also update
 # PATH so that the train and serve programs are found when the container is invoked.
+COPY pyproject.toml /
+RUN poetry install
+
 
 ENV PYTHONUNBUFFERED=TRUE
 ENV PYTHONDONTWRITEBYTECODE=TRUE
@@ -45,4 +33,11 @@ ENV PATH="/opt/program:${PATH}"
 # Set up the program in the image
 COPY decision_trees /opt/program
 WORKDIR /opt/program
+USER root
+RUN chmod +x train
+
+
+
+ARG NB_UID="0"
+ARG NB_GID="0"
 
